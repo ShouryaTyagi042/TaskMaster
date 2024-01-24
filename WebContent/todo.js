@@ -15,7 +15,7 @@ function displayTasks(tasks) {
   tasks.forEach((task) => {
     const listItem = document.createElement("li");
     const taskDiv = document.createElement("div");
-    taskDiv.classList.add("task-item"); 
+    taskDiv.classList.add("task-item");
 
     const checkbox = document.createElement("input");
     checkbox.classList.add("completion-tick");
@@ -23,18 +23,20 @@ function displayTasks(tasks) {
     checkbox.type = "checkbox";
     checkbox.checked = task.status;
 
-    
     checkbox.addEventListener("change", function () {
       updateTaskStatus(task.id, checkbox.checked);
     });
 
+    const dueDateText = document.createElement("span");
+    dueDateText.classList.add("due-date"); // Apply CSS class
+    dueDateText.textContent = task.dueDate ? formatDate(task.dueDate) : "";
+
     taskDiv.appendChild(checkbox);
     taskDiv.appendChild(document.createTextNode(task.description));
+    taskDiv.appendChild(dueDateText);
 
-    
     taskDiv.addEventListener("click", function () {
       if (!task.status) {
-        
         updateTaskStatus(task.id, true);
       }
     });
@@ -46,12 +48,16 @@ function displayTasks(tasks) {
 
 function addTask() {
   const taskInput = document.getElementById("taskInput");
+  const dueDateInput = document.getElementById("dueDateInput");
+
   const description = taskInput.value.trim();
+  const dueDate = dueDateInput.value;
 
   if (description !== "") {
     const newTask = {
       description: description,
       status: false, // CREATING A DEFAULT FALSE
+      dueDate: dueDate || null, // CREATING  A DEFAULT NULL
     };
 
     fetch("http://localhost:8080/TasksMaster/tasks", {
@@ -95,4 +101,9 @@ function deleteCompletedTasks() {
     .then((response) => response.json())
     .then((tasks) => displayTasks(tasks))
     .catch((error) => console.error("Error:", error));
+}
+
+function formatDate(dateString) {
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
 }

@@ -14,17 +14,25 @@ h1 {
 img {
     width: 40px;
     height: 40px;
+    background-color: #fff;
+    border: none;
 }
 
 .add-task-button {
-    border: none;
     transition: transform 0.7s ease-in-out;
+    border: none ;
+    padding: 0 0;
+}
+
+button {
+    cursor: pointer;
 }
 
 .add-task-button:hover {
     transform: rotate(360deg);
 }
 
+/* tasks css  */
 #tasks {
     margin: 50px auto;
     padding: 20px;
@@ -33,6 +41,7 @@ img {
     width: 70%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 
 ul {
     list-style-type: none;
@@ -52,14 +61,15 @@ li {
     padding: 10px;
 }
 
+.due-date {
+    color: red;
+    margin: 30px;
+}
+
 .completion-tick {
     margin: 0 15px;
 }
 
 input[type="text"] {
     margin-right: 10px;
-}
-
-button {
-    cursor: pointer;
 }

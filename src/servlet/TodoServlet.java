@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -102,11 +104,11 @@ public class TodoServlet extends HttpServlet {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				int id = resultSet.getInt("id");
-				String description = resultSet.getString("description");
-				boolean status = resultSet.getBoolean("status");
-
-				Task task = new Task(id, description, status);
+				Task task = new Task();
+				task.setId(resultSet.getInt("id"));
+				task.setDescription(resultSet.getString("description"));
+				task.setStatus(resultSet.getBoolean("status"));
+				task.setDueDate(resultSet.getDate("due_date"));
 				tasks.add(task);
 			}
 
@@ -149,10 +151,18 @@ public class TodoServlet extends HttpServlet {
 		Connection connection = null;
 		try {
 			connection = DBUtility.getConnection();
-			String insertQuery = "INSERT INTO tasks (description, status) VALUES (?, ?)";
+			String insertQuery = "INSERT INTO tasks (description, status, due_date) VALUES (?, ?, ?)";
 			try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 				preparedStatement.setString(1, task.getDescription());
 				preparedStatement.setBoolean(2, task.isStatus());
+//				preparedStatement.setTimestamp(3, new Timestamp(task.getCreationDate().getTime()));
+
+				// Set due date to null if not provided
+				if (task.getDueDate() != null) {
+					preparedStatement.setTimestamp(3, new Timestamp(task.getDueDate().getTime()));
+				} else {
+					preparedStatement.setNull(3, Types.TIMESTAMP);
+				}
 
 				preparedStatement.executeUpdate();
 			}
