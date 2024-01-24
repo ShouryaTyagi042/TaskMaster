@@ -15,7 +15,7 @@ function displayTasks(tasks) {
   tasks.forEach((task) => {
     const listItem = document.createElement("li");
     const taskDiv = document.createElement("div");
-    taskDiv.classList.add("task-item"); // Add a CSS class for styling
+    taskDiv.classList.add("task-item"); 
 
     const checkbox = document.createElement("input");
     checkbox.classList.add("completion-tick");
@@ -23,7 +23,7 @@ function displayTasks(tasks) {
     checkbox.type = "checkbox";
     checkbox.checked = task.status;
 
-    // Add a "change" event listener to handle checkbox clicks
+    
     checkbox.addEventListener("change", function () {
       updateTaskStatus(task.id, checkbox.checked);
     });
@@ -31,10 +31,10 @@ function displayTasks(tasks) {
     taskDiv.appendChild(checkbox);
     taskDiv.appendChild(document.createTextNode(task.description));
 
-    // Add a "click" event listener to mark the task as completed
+    
     taskDiv.addEventListener("click", function () {
       if (!task.status) {
-        // Only mark as completed if not already completed
+        
         updateTaskStatus(task.id, true);
       }
     });
